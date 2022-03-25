@@ -27,6 +27,7 @@ app.set('views', path.join(__dirname, '/views'));
 app.set('view engine', 'ejs');                               // for requiring ejs files.
 app.use(express.urlencoded({ extended: true }))           // need this line to use req.body.  use runs a function in every single request. 
 app.use(methodOverride('_method'));                      // to send request by forms other than get or post
+app.use(express.static(path.join(__dirname, 'public')));
 
 
 // Routes
