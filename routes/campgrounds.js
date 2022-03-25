@@ -1,9 +1,11 @@
 import express from 'express';
 const router = express.Router();
-import catchAsync from '../utils/catchAsync.js';            // try and catch errors in async functions
-import ExpressError from '../utils/ExpressError.js';        // throw an error with custome statusCode and msg
+
 import Campground from '../models/campground.js';           // import mongoose model created inside models folder
 import { campgroundSchema } from '../schemas.js';           // JOI schema used to validate new/updated camps in the server side
+
+import catchAsync from '../utils/catchAsync.js';            // try and catch errors in async functions
+import ExpressError from '../utils/ExpressError.js';        // throw an error with custome statusCode and msg
 
 
 // Function that validates new/updated items in the server side
