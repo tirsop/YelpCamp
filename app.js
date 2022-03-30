@@ -8,10 +8,8 @@ const __dirname = new URL('.', import.meta.url).pathname;
 import ExpressError from './utils/ExpressError.js';        // to throw an error with custome statusCode and msg
 import methodOverride from 'method-override';             // for using put/patch request in the html forms
 import ejsMate from 'ejs-mate';                            // for creating the boilerplate
-
-import campgrounds from './routes/campgrounds.js';
-import reviews from './routes/reviews.js';
-
+import session from 'express-session';
+import flash from 'connect-flash';
 import mongoose from "mongoose";
 mongoose.connect('mongodb://localhost:27017/yelp-camp')
     .then(() => console.log(`--------------console.log\nDatabase connected\n`))
@@ -20,6 +18,9 @@ mongoose.connect('mongodb://localhost:27017/yelp-camp')
         console.log(err + `\n`)
     })
 
+import campgrounds from './routes/campgrounds.js';
+import reviews from './routes/reviews.js';
+
 const app = express();                                          // abbreviation of the code
 
 app.engine('ejs', ejsMate);                                 // for creating the boilerplate
@@ -27,7 +28,24 @@ app.set('views', path.join(__dirname, '/views'));
 app.set('view engine', 'ejs');                               // for requiring ejs files.
 app.use(express.urlencoded({ extended: true }))           // need this line to use req.body.  use runs a function in every single request. 
 app.use(methodOverride('_method'));                      // to send request by forms other than get or post
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public')));    // serve the public's folder assets
+
+const sessionConfig = {
+    secret: 'thisshouldbeabettersecret',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        httpOnly: true,
+        expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+        maxAge: 1000 * 60 * 60 * 24 * 7
+    }
+}
+app.use(session(sessionConfig));
+app.use(flash());
+app.use((req, res, next) => {
+    res.locals.success = req.flash('success');
+    next();
+})
 
 
 // Routes
