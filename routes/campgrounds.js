@@ -38,11 +38,19 @@ router.post('/', validateCampground, catchAsync(async (req, res, next) => {
 // Show the details of each item finding them by id
 router.get('/:id', catchAsync(async (req, res) => {
     const campground = await Campground.findById(req.params.id).populate('reviews');
+    if (!campground) {
+        req.flash('error', 'Cannot find that campground');
+        return res.redirect('/campgrounds');
+    }
     res.render('campgrounds/show', { campground });
 }))
 // Updates/edit item. 1st shows pre-filled form, then updates value & redirect to show page.
 router.get('/:id/edit', catchAsync(async (req, res) => {
     const campground = await Campground.findById(req.params.id);
+    if (!campground) {
+        req.flash('error', 'Cannot edit/find that campground');
+        return res.redirect('/campgrounds');
+    }
     res.render('campgrounds/edit', { campground });
 }))
 router.put('/:id', validateCampground, catchAsync(async (req, res) => {
