@@ -23,8 +23,9 @@ mongoose.connect('mongodb://localhost:27017/yelp-camp')
     console.log(err + `\n`)
   })
 // import files that containing the routes
-import campgrounds from './routes/campgrounds.js';
-import reviews from './routes/reviews.js';
+import userRoutes from './routes/users.js'
+import campgroundRoutes from './routes/campgrounds.js';
+import reviewRoutes from './routes/reviews.js';
 // middleware
 app.engine('ejs', ejsMate);                                 // for creating the boilerplate
 app.set('views', path.join(__dirname, '/views'));
@@ -64,8 +65,9 @@ app.get('/fakeUser', async (req, res) => {
 })
 
 // Routes
-app.use('/campgrounds', campgrounds);
-app.use('/campgrounds/:id/reviews', reviews);
+app.use('/', userRoutes)
+app.use('/campgrounds', campgroundRoutes);
+app.use('/campgrounds/:id/reviews', reviewRoutes);
 
 // all: for all types of request. *: for any url which is not above ones
 app.all('*', (req, res, next) => {
