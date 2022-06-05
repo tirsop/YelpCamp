@@ -28,6 +28,7 @@ router.get('/', catchAsync(async (req, res) => {
 }))
 // Creates new item. 1st display a form (/new), then post to save item (req.body) in the db
 router.get('/new', isLoggedIn, (req, res) => {
+  // console.log(currentUser);
   res.render('campgrounds/new');
 });
 router.post('/', isLoggedIn, validateCampground, catchAsync(async (req, res, next) => {
