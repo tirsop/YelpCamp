@@ -55,7 +55,7 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 app.use((req, res, next) => {                             // creation of local variables accesible from all templates
-  res.locals.currentUser = Boolean(req.user);                      // used in the navbar template to decide whether display links or not
+  res.locals.currentUser = req.user;                      // used in the navbar template to decide whether display links or not
   res.locals.success = req.flash('success');
   res.locals.error = req.flash('error');
   next();
