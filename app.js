@@ -61,16 +61,15 @@ app.use((req, res, next) => {                             // creation of local v
   next();
 })
 
-app.get('/fakeUser', async (req, res) => {
-  const user = new User({ email: 'tirso@try.com', username: 'firstUser' });
-  const newUser = await User.register(user, 'chicken');
-  res.send(newUser);
-})
 
 // Routes
 app.use('/', userRoutes)
 app.use('/campgrounds', campgroundRoutes);
 app.use('/campgrounds/:id/reviews', reviewRoutes);
+
+app.get('/', (req, res) => {
+  res.render('home')
+})
 
 // all: for all types of request. *: for any url which is not above ones
 app.all('*', (req, res, next) => {
