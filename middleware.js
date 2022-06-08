@@ -1,6 +1,7 @@
 import { campgroundSchema, reviewSchema } from './schemas.js';           // JOI schema used to validate new/updated camps in the server side
 import ExpressError from './utils/ExpressError.js';        // to throw an error with custome statusCode and msg
 import Campground from './models/campground.js';           // import mongoose model created inside models folder
+import Review from './models/review.js';           // import mongoose model created inside models folder
 
 
 // Function that checks if the user is logged in
@@ -43,5 +44,14 @@ const validateReview = (req, res, next) => {
     next();
   }
 }
+const isReviewAuthor = async (req, res, next) => {
+  const { id, reviewId } = req.params;
+  const review = await Review.findById(reviewId);
+  if (!review.author.equals(req.user._id)) {
+    req.flash('error', "You do not have permission to do that!");
+    return res.redirect(`/campgrounds/${id}`);
+  }
+  next();
+}
 
-export { isLoggedIn, validateCampground, isAuthor, validateReview }
+export { isLoggedIn, validateCampground, isAuthor, validateReview, isReviewAuthor }
