@@ -20,8 +20,8 @@ import LocalStrategy from 'passport-local';
 import User from './models/user.js'                           // require user model
 import MongoStore from 'connect-mongo'  // video 574
 import mongoose from "mongoose";                            // import mongoose and choose db
-// const dbUrl = process.env.DB_URL;
-const dbUrl = 'mongodb://localhost:27017/yelp-camp';
+const dbUrl = process.env.DB_URL;
+// const dbUrl = 'mongodb://localhost:27017/yelp-camp';
 mongoose.connect(dbUrl)
   .then(() => console.log(`--------------console.log\nDatabase connected\n`))
   .catch(err => {
