@@ -18,10 +18,10 @@ import flash from 'connect-flash';
 import passport from 'passport';
 import LocalStrategy from 'passport-local';
 import User from './models/user.js'                           // require user model
-// import MongoStore from 'connect-mongo'  // video 574
+import MongoStore from 'connect-mongo'  // video 574
 import mongoose from "mongoose";                            // import mongoose and choose db
-const dbUrl = process.env.DB_URL;
-// const dbUrl = 'mongodb://localhost:27017/yelp-camp';
+// const dbUrl = process.env.DB_URL;
+const dbUrl = 'mongodb://localhost:27017/yelp-camp';
 mongoose.connect(dbUrl)
   .then(() => console.log(`--------------console.log\nDatabase connected\n`))
   .catch(err => {
@@ -47,18 +47,27 @@ const secret = process.env.SECRET || 'thisshouldbeabettersecret'
 //   url: dbUrl,
 //   secret,
 //   touchAfter: 24 * 3600 // time period in seconds
-// });
+// })
 // store.on("error", function (e) {
 //   console.log("SeSSION STORE ERROR", e);
 // })
+
+
 // express session using local memory
 const sessionConfig = {
+  store: MongoStore.create({
+    mongoUrl: dbUrl,
+    secret,
+    touchAfter: 24 * 3600 // time period in seconds
+  }),
+  name: 'session',
   secret,
   resave: false,
   saveUninitialized: true,
   cookie: {
     httpOnly: true,
-    expires: Date.now() + 1000 * 60 * 60 * 8,    // session expires in 8 hours
+    // secure: true,
+    expires: Date.now() + 1000 * 60 * 60 * 24 * 7,    // session expires in 8 hours
     maxAge: 1000 * 60 * 60 * 24 * 7
   }
 }
