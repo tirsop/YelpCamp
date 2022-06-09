@@ -105,7 +105,7 @@ app.all('*', (req, res, next) => {
 app.use((err, req, res, next) => {
   const { statusCode = 500 } = err;
   if (!err.message) err.message = 'Oh no, Something went wrong!'
-  console.log("Oooooooooooooooooooooooooole paco tu muerto musha grasia");
+  console.log(err.message);
   res.status(statusCode).render('error', { err });
 })
 
