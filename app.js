@@ -1,6 +1,10 @@
 console.log(`\n\n\n\n\n\n\n\n\n
 ******************************************************************`);
 
+// if (process.env.NODE_ENV !== "production") {
+import 'dotenv/config';
+// }
+
 import express from 'express';                                  //import express package
 const app = express();                                          // abbreviation of the code
 import path from 'path';
@@ -14,9 +18,11 @@ import flash from 'connect-flash';
 import passport from 'passport';
 import LocalStrategy from 'passport-local';
 import User from './models/user.js'                           // require user model
-// import mongoose and choose db
-import mongoose from "mongoose";
-mongoose.connect('mongodb://localhost:27017/yelp-camp')
+// import MongoStore from 'connect-mongo'  // video 574
+import mongoose from "mongoose";                            // import mongoose and choose db
+const dbUrl = process.env.DB_URL;
+// const dbUrl = 'mongodb://localhost:27017/yelp-camp';
+mongoose.connect(dbUrl)
   .then(() => console.log(`--------------console.log\nDatabase connected\n`))
   .catch(err => {
     console.log(`--------------console.log\nMONGO CONNECTION ERROR:`)
@@ -33,14 +39,26 @@ app.set('view engine', 'ejs');                               // for requiring ej
 app.use(express.urlencoded({ extended: true }))           // need this line to use req.body.  use runs a function in every single request. 
 app.use(methodOverride('_method'));                      // to send request by forms other than get or post
 app.use(express.static(path.join(__dirname, 'public')));    // serve the public's folder assets
-// express session
+
+const secret = process.env.SECRET || 'thisshouldbeabettersecret'
+
+// commented lines below are video 574
+// const store = new MongoStore({
+//   url: dbUrl,
+//   secret,
+//   touchAfter: 24 * 3600 // time period in seconds
+// });
+// store.on("error", function (e) {
+//   console.log("SeSSION STORE ERROR", e);
+// })
+// express session using local memory
 const sessionConfig = {
-  secret: 'thisshouldbeabettersecret',
+  secret,
   resave: false,
   saveUninitialized: true,
   cookie: {
     httpOnly: true,
-    expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+    expires: Date.now() + 1000 * 60 * 60 * 8,    // session expires in 8 hours
     maxAge: 1000 * 60 * 60 * 24 * 7
   }
 }
