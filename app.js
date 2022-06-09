@@ -67,7 +67,7 @@ const sessionConfig = {
   cookie: {
     httpOnly: true,
     // secure: true,
-    expires: Date.now() + 1000 * 60 * 60 * 24 * 7,    // session expires in 8 hours
+    expires: Date.now() + 1000 * 60 * 60 * 24 * 7,    // session expiration time
     maxAge: 1000 * 60 * 60 * 24 * 7
   }
 }
@@ -105,6 +105,7 @@ app.all('*', (req, res, next) => {
 app.use((err, req, res, next) => {
   const { statusCode = 500 } = err;
   if (!err.message) err.message = 'Oh no, Something went wrong!'
+  console.log("Oooooooooooooooooooooooooole paco tu muerto musha grasia");
   res.status(statusCode).render('error', { err });
 })
 
