@@ -6,9 +6,17 @@ import campgrounds from '../controllers/campgrounds.js';
 import { isLoggedIn, isAuthor, validateCampground } from '../middleware.js';              // what to do if user is not authenticate
 import catchAsync from '../utils/catchAsync.js';            // try and catch errors in async functions
 
+import multer from 'multer';
+import { storage } from '../cloudinary/index.js';
+const upload = multer({ storage });
+
 router.route('/')
   .get(catchAsync(campgrounds.index))
-  .post(isLoggedIn, validateCampground, catchAsync(campgrounds.createCamp));
+  // .post(isLoggedIn, validateCampground, catchAsync(campgrounds.createCamp));
+  .post(upload.array('image'), (req, res) => {
+    console.log(req.body, req.files);
+    res.send(req.body);
+  })
 
 router.get('/new', isLoggedIn, campgrounds.newCamp);
 
