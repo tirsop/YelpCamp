@@ -18,9 +18,23 @@ mongoose.connect(dbUrl)
     console.log(err + `\n`)
   })
 
-
-
-
+const imagesUrls = [
+  {
+    url: "https://res.cloudinary.com/tirsopascual/image/upload/v1655081514/YelpCamp/hpoptulcxtgxlxrhabrf.jpg",
+    filename: "YelpCamp/hpoptulcxtgxlxrhabrf"
+  },
+  { url: "https://res.cloudinary.com/tirsopascual/image/upload/v1655081514/YelpCamp/xknjukpbfx3vowtz5pi6.jpg", filename: "YelpCamp/xknjukpbfx3vowtz5pi6" },
+  { url: "https://res.cloudinary.com/tirsopascual/image/upload/v1655081514/YelpCamp/fqmkvra5dsjdquahixn8.jpg", filename: "YelpCamp/fqmkvra5dsjdquahixn8" },
+  { url: "https://res.cloudinary.com/tirsopascual/image/upload/v1655081514/YelpCamp/fmdv7j3kcrjou8raswry.jpg", filename: "YelpCamp/fmdv7j3kcrjou8raswry" },
+  { url: "https://res.cloudinary.com/tirsopascual/image/upload/v1655081514/YelpCamp/xagsnju4wijovdmeu0sa.jpg", filename: "YelpCamp/xagsnju4wijovdmeu0sa" },
+  { url: "https://res.cloudinary.com/tirsopascual/image/upload/v1655081514/YelpCamp/ke8bxqifjuq4alzio9ce.jpg", filename: "YelpCamp/ke8bxqifjuq4alzio9ce" },
+  { url: "https://res.cloudinary.com/tirsopascual/image/upload/v1655081514/YelpCamp/fzb897y5qwaxuvtpgrwc.jpg", filename: "YelpCamp/fzb897y5qwaxuvtpgrwc" },
+  { url: "https://res.cloudinary.com/tirsopascual/image/upload/v1655081515/YelpCamp/shamlinwetlp5vy5lban.jpg", filename: "YelpCamp/shamlinwetlp5vy5lban" },
+  { url: "https://res.cloudinary.com/tirsopascual/image/upload/v1655081515/YelpCamp/rz5rvwjqozw3mp1fwzv9.jpg", filename: "YelpCamp/rz5rvwjqozw3mp1fwzv9" },
+  { url: "https://res.cloudinary.com/tirsopascual/image/upload/v1655081515/YelpCamp/mbs7zvwmx95uoipyywzb.jpg", filename: "YelpCamp/mbs7zvwmx95uoipyywzb" },
+  { url: "https://res.cloudinary.com/tirsopascual/image/upload/v1655081516/YelpCamp/aitdkydvgk9ptu76kwcm.jpg", filename: "YelpCamp/aitdkydvgk9ptu76kwcm" },
+  { url: "https://res.cloudinary.com/tirsopascual/image/upload/v1655081515/YelpCamp/co0zhwgwn8e4o1f1iug5.jpg", filename: "YelpCamp/co0zhwgwn8e4o1f1iug5" }
+];
 
 // function that returns a random element of an array
 const sample = array => array[Math.floor(Math.random() * array.length)];
@@ -35,9 +49,12 @@ const seedDB = async () => {
       author: '62a1362ceac5d7756516ee2b',          // choose an existing user id depending on production or development!!!
       title: `${sample(descriptors)} ${sample(places)}`,
       location: `${cities[random1000].city}, ${cities[random1000].state}`,
-      image: 'https://res.cloudinary.com/fleetnation/image/private/c_fit,w_1120/g_south,l_text:style_gothic2:%C2%A9%20John%20Williams,o_20,y_10/g_center,l_watermark4,o_25,y_50/v1557042400/hfnbp4wrmkipn4akocil.jpg',
       description: 'Beautivul camp in the side bank of a RTCRtpReceiver, and there are bears so be carefult because thy are strolling around and they may surprise you and eat you bitch.',
-      price
+      price,
+      images: [
+        sample(imagesUrls),
+        sample(imagesUrls)
+      ]
     })
     await camp.save();
     console.log('...');
