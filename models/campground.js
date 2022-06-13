@@ -1,14 +1,19 @@
 import mongoose from "mongoose";
 import Review from './review.js';                // import mongoose model created inside models folder
 
+// video 544: getting a 200px img using the cloudinary API
+const ImageSchema = new mongoose.Schema({
+  url: String,
+  filename: String
+});
+// it does NOT allow arrow functions in the line below
+ImageSchema.virtual('thumbnail').get(function () {
+  return this.url.replace('/upload', '/upload/w_200');
+});
+
 const CampgroundSchema = new mongoose.Schema({
   title: String,
-  images: [
-    {
-      url: String,
-      filename: String
-    }
-  ],
+  images: [ImageSchema],
   price: Number,
   description: String,
   location: String,
