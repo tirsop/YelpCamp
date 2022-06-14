@@ -1,7 +1,6 @@
 console.log(`\n\n\n\n\n\n\n\n\n
 ******************************************************************`);
 import 'dotenv/config';
-
 import cities from './cities.js';
 import { descriptors, places } from './seedHelpers.js';
 import mongoose from "mongoose";
@@ -49,7 +48,14 @@ const seedDB = async () => {
       author: '62a1362ceac5d7756516ee2b',          // choose an existing user id depending on production or development!!!
       title: `${sample(descriptors)} ${sample(places)}`,
       location: `${cities[random1000].city}, ${cities[random1000].state}`,
-      description: 'Beautivul camp in the side bank of a RTCRtpReceiver, and there are bears so be carefult because thy are strolling around and they may surprise you and eat you bitch.',
+      geometry: {
+        type: "Point",
+        coordinates: [
+          cities[random1000].longitude,
+          cities[random1000].latitude,
+        ]
+      },
+      description: `Beautiful camp in the side bank of a ${cities[random1000].city} river, and there are bears so be careful because they are strolling around and they may surprise you and eat you.`,
       price,
       images: [
         sample(imagesUrls),
