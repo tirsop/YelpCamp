@@ -5,7 +5,8 @@ import cities from './cities.js';
 import { descriptors, places } from './seedHelpers.js';
 import mongoose from "mongoose";
 import Campground from '../models/campground.js';                // import mongoose model created inside models folder
-import User from '../models/user.js';                // import mongoose model created inside models folder
+import Review from '../models/review.js';                        // import mongoose model created inside models folder
+import User from '../models/user.js';                            // import mongoose model created inside models folder
 const dbUrl = process.env.DB_URL;
 // const dbUrl = 'mongodb://localhost:27017/yelp-camp';
 mongoose.connect(dbUrl)
@@ -37,15 +38,32 @@ const imagesUrls = [
 
 // function that returns a random element of an array
 const sample = array => array[Math.floor(Math.random() * array.length)];
+const authors = [
+  "62a92ec0bbd07df59664314b",
+  "62a1362ceac5d7756516ee2b",
+  "62a92edcbbd07df596643190",
+  "62a92eefbbd07df5966431bf"
+];
+const ratings = [3, 4, 5];
+const bodyReviews = [
+  "The beer was really cheap from 4pm to 7pm. It was a little noisy at nights. The owner was a little scary.",
+  "Sunsets here are wonderfull. Also they provide you with equipment to do your own bbqs. Overall an amazing experience that I will repeat",
+  "すごかったです。みんなここに来て欲しいです。おすすめ。",
+  "一目惚れしちゃった。人優しいし、食べ物美味しいし。熊いっぱいいるのでお気をつけてください。",
+  "オーナーが日本語ペラペラですよ。びっくりした。たこ焼きも作れるだし。Wi-Fiちょっとないですけれども。。。",
+  "Bring a bell and make noise when hiking just in case. Many bears around, specially in summer and they are hungry for honey.",
+]
 
 // first delete was is inside the db, and then randomly generates seeds from 2 external files
 const seedDB = async () => {
   await Campground.deleteMany({});
-  for (let i = 0; i < 20; i++) {     // 20 bc I want 20 seeds
+  console.log("All campgrounds deleted.");
+  console.log("Creating new campgrounds...");
+  for (let i = 0; i < 10; i++) {     // 20 bc I want 20 seeds
     const random1000 = Math.floor(Math.random() * 1000)      // Generates a random number from 0 to 1000. 1000 bc there are 1000 cities in cities.js
     const price = Math.floor(Math.random() * 20) + 10;
     const camp = new Campground({
-      author: '62a1362ceac5d7756516ee2b',          // choose an existing user id depending on production or development!!!
+      author: sample(authors),          // Choose an existing user id depending on production or development!!!
       title: `${sample(descriptors)} ${sample(places)}`,
       location: `${cities[random1000].city}, ${cities[random1000].state}`,
       geometry: {
@@ -55,7 +73,7 @@ const seedDB = async () => {
           cities[random1000].latitude,
         ]
       },
-      description: `Beautiful camp in the side bank of a ${cities[random1000].city} river, and there are bears so be careful because they are strolling around and they may surprise you and eat you.`,
+      description: `Located in ${cities[random1000].state}, this beautiful camp in the side bank of a ${cities[random1000].city} river, and there are bears so be careful because they are strolling around and they may surprise you and eat you.`,
       price,
       images: [
         sample(imagesUrls),
@@ -65,8 +83,21 @@ const seedDB = async () => {
     await camp.save();
     console.log('...');
   }
+  const campgrounds = await Campground.find({});
+  console.log("Creating reviews...");
+  for (let campground of campgrounds) {
+    const review1 = new Review({ author: sample(authors), rating: sample(ratings), body: sample(bodyReviews) });
+    const review2 = new Review({ author: sample(authors), rating: sample(ratings), body: sample(bodyReviews) });
+    campground.reviews.push(review1, review2);
+    await review1.save();
+    await review2.save();
+    await campground.save();
+    console.log('...');
+  }
 }
+const campsTotal = await Campground.count();
 seedDB().then(() => {
   mongoose.connection.close();
+  console.log(`${campsTotal} campgrounds created!`);
 });
 

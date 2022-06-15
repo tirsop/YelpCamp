@@ -6,10 +6,11 @@ const ImageSchema = new mongoose.Schema({
   url: String,
   filename: String
 });
-// it does NOT allow arrow functions in the line below
-ImageSchema.virtual('thumbnail').get(function () {
+ImageSchema.virtual('thumbnail').get(function () {      // it does NOT allow arrow functions 
   return this.url.replace('/upload', '/upload/w_200');
 });
+
+const opts = { toJSON: { virtuals: true } };  // video558: to include the virtuals when jsonstringify the object
 
 const CampgroundSchema = new mongoose.Schema({
   title: String,
@@ -38,6 +39,14 @@ const CampgroundSchema = new mongoose.Schema({
       ref: 'Review'
     }
   ]
+}, opts);
+
+// video558: virtual containing the map popup text
+CampgroundSchema.virtual('properties.popUpMarkup').get(function () {
+  return `
+    <strong><a href="/campgrounds/${this._id}">${this.title}</a></strong>
+    <p>${this.description.substring(0, 70)}...</p>
+  `
 })
 
 //Deletes all reviews of a campground when you delete a campground
