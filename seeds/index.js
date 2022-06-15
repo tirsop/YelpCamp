@@ -38,12 +38,15 @@ const imagesUrls = [
 
 // function that returns a random element of an array
 const sample = array => array[Math.floor(Math.random() * array.length)];
+
 const authors = [
   "62a92ec0bbd07df59664314b",
   "62a1362ceac5d7756516ee2b",
+];
+const customers = [
   "62a92edcbbd07df596643190",
   "62a92eefbbd07df5966431bf"
-];
+]
 const ratings = [3, 4, 5];
 const bodyReviews = [
   "The beer was really cheap from 4pm to 7pm. It was a little noisy at nights. The owner was a little scary.",
@@ -59,7 +62,7 @@ const seedDB = async () => {
   await Campground.deleteMany({});
   console.log("All campgrounds deleted.");
   console.log("Creating new campgrounds...");
-  for (let i = 0; i < 10; i++) {     // 20 bc I want 20 seeds
+  for (let i = 0; i < 100; i++) {     // 20 bc I want 20 seeds
     const random1000 = Math.floor(Math.random() * 1000)      // Generates a random number from 0 to 1000. 1000 bc there are 1000 cities in cities.js
     const price = Math.floor(Math.random() * 20) + 10;
     const camp = new Campground({
@@ -73,7 +76,8 @@ const seedDB = async () => {
           cities[random1000].latitude,
         ]
       },
-      description: `Located in ${cities[random1000].state}, this beautiful camp in the side bank of a ${cities[random1000].city} river, and there are bears so be careful because they are strolling around and they may surprise you and eat you.`,
+      description: `
+        Located in ${cities[random1000].state}, this beautiful camp in the side bank of a ${cities[random1000].city} river, and there are bears so be careful because they are strolling around and they may surprise you and eat you.\n This campground is mangaged by a lovely old couple, commonly referred as Ojiichan and Obaachan, that can prepare delicious meals for guest under request.`,
       price,
       images: [
         sample(imagesUrls),
@@ -86,8 +90,8 @@ const seedDB = async () => {
   const campgrounds = await Campground.find({});
   console.log("Creating reviews...");
   for (let campground of campgrounds) {
-    const review1 = new Review({ author: sample(authors), rating: sample(ratings), body: sample(bodyReviews) });
-    const review2 = new Review({ author: sample(authors), rating: sample(ratings), body: sample(bodyReviews) });
+    const review1 = new Review({ author: customers[0], rating: sample(ratings), body: sample(bodyReviews) });
+    const review2 = new Review({ author: customers[1], rating: sample(ratings), body: sample(bodyReviews) });
     campground.reviews.push(review1, review2);
     await review1.save();
     await review2.save();
