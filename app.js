@@ -5,7 +5,6 @@ import 'dotenv/config';
 import express from 'express';                                  //import express package
 import path from 'path';
 import { URL } from 'url';
-const __dirname = new URL('.', import.meta.url).pathname;
 import ExpressError from './utils/ExpressError.js';        // to throw an error with custome statusCode and msg
 import methodOverride from 'method-override';             // for using put/patch request in the html forms
 import ejsMate from 'ejs-mate';                            // for creating the boilerplate
@@ -19,28 +18,33 @@ import mongoose from "mongoose";                            // import mongoose a
 import mongoSanitize from 'express-mongo-sanitize';
 
 
-
-
+const __dirname = new URL('.', import.meta.url).pathname;
 const app = express();                                          // abbreviation of the code
 const dbUrl = process.env.DB_URL;
 // const dbUrl = 'mongodb://localhost:27017/yelp-camp';
+
+
 mongoose.connect(dbUrl)
   .then(() => console.log(`--------------console.log\nDatabase connected\n`))
   .catch(err => {
     console.log(`--------------console.log\nMONGO CONNECTION ERROR:`)
     console.log(err + `\n`)
   })
+
+
 // import files that containing the routes
 import userRoutes from './routes/users.js'
 import campgroundRoutes from './routes/campgrounds.js';
 import reviewRoutes from './routes/reviews.js';
+
+
 // middleware
-app.engine('ejs', ejsMate);                                 // for creating the boilerplate
+app.engine('ejs', ejsMate);                                       // for creating the boilerplate
 app.set('views', path.join(__dirname, '/views'));
-app.set('view engine', 'ejs');                               // for requiring ejs files.
-app.use(express.urlencoded({ extended: true }))           // need this line to use req.body.  use runs a function in every single request. 
-app.use(methodOverride('_method'));                      // to send request by forms other than get or post
-app.use(express.static(path.join(__dirname, 'public')));    // serve the public's folder assets
+app.set('view engine', 'ejs');                                    // for requiring ejs files.
+app.use(express.urlencoded({ extended: true }))                   // need this line to use req.body.  use runs a function in every single request. 
+app.use(methodOverride('_method'));                               // to send request by forms other than get or post
+app.use(express.static(path.join(__dirname, 'public')));          // serve the public's folder assets
 app.use(mongoSanitize());
 const secret = process.env.SECRET || 'thisshouldbeabettersecret'
 
