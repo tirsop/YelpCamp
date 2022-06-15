@@ -1,12 +1,8 @@
 console.log(`\n\n\n\n\n\n\n\n\n
 ******************************************************************`);
 
-// if (process.env.NODE_ENV !== "production") {
 import 'dotenv/config';
-// }
-
 import express from 'express';                                  //import express package
-const app = express();                                          // abbreviation of the code
 import path from 'path';
 import { URL } from 'url';
 const __dirname = new URL('.', import.meta.url).pathname;
@@ -20,6 +16,7 @@ import LocalStrategy from 'passport-local';
 import User from './models/user.js'                           // require user model
 import MongoStore from 'connect-mongo'  // video 574
 import mongoose from "mongoose";                            // import mongoose and choose db
+const app = express();                                          // abbreviation of the code
 const dbUrl = process.env.DB_URL;
 // const dbUrl = 'mongodb://localhost:27017/yelp-camp';
 mongoose.connect(dbUrl)
