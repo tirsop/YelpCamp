@@ -14,8 +14,13 @@ import flash from 'connect-flash';
 import passport from 'passport';
 import LocalStrategy from 'passport-local';
 import User from './models/user.js'                           // require user model
-import MongoStore from 'connect-mongo'  // video 574
+import MongoStore from 'connect-mongo'                          // video 574
 import mongoose from "mongoose";                            // import mongoose and choose db
+import mongoSanitize from 'express-mongo-sanitize';
+
+
+
+
 const app = express();                                          // abbreviation of the code
 const dbUrl = process.env.DB_URL;
 // const dbUrl = 'mongodb://localhost:27017/yelp-camp';
@@ -36,7 +41,7 @@ app.set('view engine', 'ejs');                               // for requiring ej
 app.use(express.urlencoded({ extended: true }))           // need this line to use req.body.  use runs a function in every single request. 
 app.use(methodOverride('_method'));                      // to send request by forms other than get or post
 app.use(express.static(path.join(__dirname, 'public')));    // serve the public's folder assets
-
+app.use(mongoSanitize());
 const secret = process.env.SECRET || 'thisshouldbeabettersecret'
 
 // commented lines below are video 574
