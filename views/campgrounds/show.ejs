@@ -89,6 +89,9 @@
 
       <!-- Display all the reviews: -->
       <h4 class="mb-3">Customer reviews:</h2>
+      <% if (campground.reviews.length === 0) { %>
+        <p>No reviews yet!</p>
+      <% } %> 
       <% for (let review of campground.reviews) {%>
         <div class="card shadow mb-3">
           <div class="card-body">
